@@ -8,35 +8,30 @@ import com.google.gson.Gson;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.builder.HashCodeExclude;
-
-import java.math.BigDecimal;
 
 /**
  * @author admin
  */
-@TableName("tx_classmate")
+@TableName("tx_meta_class")
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode
-public class ClassMateModel {
+public class MenuModel {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    @TableField(value = "price")
-    private BigDecimal price;
+    @TableField(value = "p_description")
+    private String pDescription;
 
-    @TableField(value = "users")
-    private String users;
-    @TableField(value = "agency")
-    private String agency;
+    @TableField(value = "p_seed_id")
+    private Integer pSeedId;
 
-    @TableField(value = "link")
-    private String link;
+    @TableField(value = "c_description")
+    private String cDescription;
 
     @TableField(value = "c_seed_id")
-    private Integer seedId;
+    private Integer cSeedId;
 
 
     @Override

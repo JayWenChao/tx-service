@@ -1,6 +1,7 @@
 package com.tencent.controller;
 
 import com.tencent.dataservice.TxDataServiceImpl;
+import com.tencent.dto.Pair;
 import com.tencent.kt.model.MsgResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +21,15 @@ public class KtDataController {
 
 
     @PostMapping("/query")
-    public MsgResponse selectTableTkList(){
-        return txDataService.queryData();
+    public MsgResponse selectTableTkList(Pair pair) {
+        return txDataService.queryData(pair);
     }
+
+    @PostMapping("/menu")
+    public MsgResponse selectMenu(Pair pair) {
+        return txDataService.queryMenu();
+    }
+
 
 
 }
