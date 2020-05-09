@@ -1,5 +1,7 @@
 package com.tencent.dataservice;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tencent.kt.model.MsgResponse;
 import com.tencent.mapper.ClassMateMapper;
 import com.tencent.model.ClassMateModel;
@@ -21,9 +23,10 @@ public class TxDataServiceImpl implements ITxDataService {
 
     @Override
     public MsgResponse queryData() {
-        ClassMateModel classMateModel = classMateMapper.selectById(1);
-        log.info("mode: [{}]", classMateModel);
-        return MsgResponse.ofSuccessMsg("操作成功", classMateModel);
+        Page<ClassMateModel>  page = new Page<>(1,20);
+        Page<ClassMateModel> classMateModelPage = classMateMapper.selectPage(page, new QueryWrapper<ClassMateModel>());
+        log.info("mode: [{}]", classMateModelPage);
+        return MsgResponse.ofSuccessMsg("操作成功", classMateModelPage);
     }
 
 }

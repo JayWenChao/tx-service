@@ -1,6 +1,7 @@
 package com.tencent.kt.configuration;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -11,8 +12,10 @@ public class MybatisPlusConfig {
 
     @Bean
     public PaginationInterceptor paginationInterceptor() {
-        PaginationInterceptor page = new PaginationInterceptor();
-        page.setDialectType("postgresql");
-        return page;
+        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
+
+        paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
+        paginationInterceptor.setDialectType("mysql");
+        return paginationInterceptor;
     }
 }

@@ -41,4 +41,5 @@ class Config:
             )
             db_conn = global_pool.connection()
             return db_conn
-
+        else:
+            return global_pool.connection()

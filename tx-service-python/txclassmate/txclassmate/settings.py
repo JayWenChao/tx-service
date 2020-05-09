@@ -67,7 +67,7 @@ RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
 PROXY_MODE = 0
 
 #ip代理池 =>https://www.xicidaili.com/ 建议采集保存到ip.txt
-PROXY_LIST = 'D:\\tx\tx-service\\tx-service-python\\txclassmate\\txclassmate\\ip.txt'
+PROXY_LIST = 'D:\\tx\\tx-service\\tx-service-python\\txclassmate\\txclassmate\\ip.txt'
 
 
 
