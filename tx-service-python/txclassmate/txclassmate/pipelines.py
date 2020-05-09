@@ -27,13 +27,14 @@ class TxclassmatePipeline(object):
         title = item['title'][0]
         users = str(item['users'][0]).replace("\n            ", "").replace(" ", "")
         link = item['link'][0]
+        seed_id = item['seed_id']
         cursor = self.conn.cursor()
         insert_sql = """
-                        insert into tx_classmate(link, price, users ,agency,title)
-                        VALUES(%s, %s, %s, %s,%s)
+                        insert into tx_classmate(link, price, users ,agency,title,c_seed_id)
+                        VALUES(%s, %s, %s, %s,%s,%s)
                      """
         try:
-            cursor.execute(insert_sql, (link, price, users, agency, title))
+            cursor.execute(insert_sql, (link, price, users, agency, title,seed_id))
             self.conn.commit()
         except Exception as e:
             logging.error("insert data error...", e)

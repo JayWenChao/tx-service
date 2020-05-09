@@ -22,22 +22,27 @@ class ClassmateSpider(scrapy.Spider):
         sql = "select *from tx_meta_class"
         cursor.execute(sql)
         result = cursor.fetchall()
-        start_urls = []
-        for r in result:
-            mt = r['p_seed_id']
-            st = r['c_seed_id']
-            url = urls_tempalte.format(mt, st)
-            start_urls.append(url)
-        print("url len [%s] start request url..." % (len(start_urls)))
         cursor.close()
-        for url in start_urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+        for r in result:
+            st = r['c_seed_id']
+            url = urls_tempalte.format(r['p_seed_id'], r['c_seed_id'])
+            request = scrapy.Request(url=url, callback=self.parse)
+            request.meta['seed_id'] = st
+            yield request
+        print("url len [%s] start request url..." % (len(result)))
 
     def parse(self, response):
         print("start parse data...")
         item = txDataItem()
         if response.status == 200:
+            try:
+                seed_id = response.meta['seed_id']
+            except Exception as e:
+                print("get metadata exception...",e)
+                #todo 元数据获取异常,用链接切割
+                seed_id = str(response.url).split("&")[1].split("=")[1]
             for r in response.xpath('//div[@class="market-bd market-bd-6 course-list course-card-list-multi-wrap js-course-list"]//li[@class="course-card-item--v3 js-course-card-item "]'):
+                item['seed_id'] = seed_id
                 item['title'] = r.xpath('./h4/a/@title').extract()
                 item['users'] = r.xpath('./div/span[@class="line-cell item-user custom-string"]/text()').extract()
                 item['price'] = r.xpath('./div/span[@class="line-cell item-price  custom-string"]/text()').extract()

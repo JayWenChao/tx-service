@@ -20,5 +20,7 @@ class txDataItem(scrapy.Item):
     agency = scrapy.Field()
     #课程连接
     link = scrapy.Field()
+    # 种子id
+    seed_id = scrapy.Field()
 
 
