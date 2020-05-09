@@ -8,7 +8,6 @@ from txclassmate.utils.db_util import Config
 
 urls_tempalte = 'https://ke.qq.com/course/list?mt={0}&st={1}'
 
-
 class ClassmateSpider(scrapy.Spider):
     name = 'classmate'
     allowed_domains = ['ke.qq.com']
