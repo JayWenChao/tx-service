@@ -13,6 +13,7 @@ class ClassmateSpider(scrapy.Spider):
     allowed_domains = ['ke.qq.com']
 
     def __init__(self, name=None, **kwargs):
+        super().__init__(name, **kwargs)
         config = Config()
         self.conn = config.getConnention()
 

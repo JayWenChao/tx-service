@@ -1,8 +1,11 @@
 package com.tencent.dataservice;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -23,7 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +37,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class TxDataServiceImpl implements ITxDataService {
+
+    private final static String KEY = "menu";
+    private static final Cache<String, List<WrapperDTO>> CACHE = CacheBuilder.newBuilder()
+            .initialCapacity(1024)
+            .maximumSize(1000)
+            .expireAfterWrite(8, TimeUnit.MINUTES)
+            .concurrencyLevel(10)
+            .recordStats()
+            .build();
+
 
     @Autowired
     private ClassMateMapper classMateMapper;
@@ -52,7 +67,7 @@ public class TxDataServiceImpl implements ITxDataService {
             queryWrapper.ge(ClassMateModel::getPrice, 100);
         }
 
-        Page<ClassMateModel> classMateModelPage = classMateMapper.selectPage(page,queryWrapper);
+        Page<ClassMateModel> classMateModelPage = classMateMapper.selectPage(page, queryWrapper);
         List<ClassMateDTO> result = classMateModelPage.getRecords().stream().map(classMateModel -> {
             ClassMateDTO classMateDTO = ClassMateDTO.builder().build();
             BeanUtils.copyProperties(classMateModel, classMateDTO);
@@ -65,25 +80,32 @@ public class TxDataServiceImpl implements ITxDataService {
     @Override
     public MsgResponse queryMenu() {
 
-        List<MenuModel> menuModels = menuMetaMapper.selectAll();
-        Multimap<WrapperDTO, WrapperDTO> multimap = ArrayListMultimap.create();
-        Flux.fromIterable(menuModels).subscribe(menuModel -> {
-            WrapperDTO pwd = WrapperDTO.builder()
-                                       .name(menuModel.getPDescription())
-                                       .id(menuModel.getPSeedId())
-                                       .build();
-            WrapperDTO cwd = WrapperDTO.builder()
-                                       .name(menuModel.getCDescription())
-                                       .id(menuModel.getCSeedId())
-                                       .build();
-            multimap.put(pwd,cwd);
-        });
+        List<WrapperDTO> resultList = Collections.emptyList();
+        resultList = CACHE.getIfPresent(KEY);
+        if (CollectionUtil.isEmpty(resultList)) {
 
-        List<WrapperDTO> resultList = Lists.newArrayListWithCapacity(8);
-        Flux.fromIterable(multimap.keySet()).subscribe(wrapperDTO -> {
-            wrapperDTO.setChildren(Lists.newArrayList(multimap.get(wrapperDTO)));
-            resultList.add(wrapperDTO);
-        });
+            List<MenuModel> menuModels = menuMetaMapper.selectAll();
+            Multimap<WrapperDTO, WrapperDTO> multimap = ArrayListMultimap.create();
+            Flux.fromIterable(menuModels).subscribe(menuModel -> {
+                WrapperDTO pwd = WrapperDTO.builder()
+                        .name(menuModel.getPDescription())
+                        .id(menuModel.getPSeedId())
+                        .build();
+                WrapperDTO cwd = WrapperDTO.builder()
+                        .name(menuModel.getCDescription())
+                        .id(menuModel.getCSeedId())
+                        .build();
+                multimap.put(pwd, cwd);
+            });
+
+            List<WrapperDTO> wds = Lists.newArrayListWithCapacity(8);
+            Flux.fromIterable(multimap.keySet()).subscribe(wrapperDTO -> {
+                wrapperDTO.setChildren(Lists.newArrayList(multimap.get(wrapperDTO)));
+                wds.add(wrapperDTO);
+            });
+            CACHE.put(KEY, wds);
+            resultList = wds;
+        }
 
         return MsgResponse.ofSuccessMsg("操作成功", resultList);
     }
