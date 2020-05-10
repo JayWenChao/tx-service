@@ -3,19 +3,22 @@ package com.tencent.dto;
 import com.google.gson.Gson;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * @author admin
  */
 @Data
 @AllArgsConstructor
-@EqualsAndHashCode
 @NoArgsConstructor
 @Builder
-public class Pair {
+@EqualsAndHashCode
+public class WrapperDTO {
 
-    private int numPage;
-    private Integer seedId;
-    private Integer priceTop;
+
+    private String name;
+    private Integer id;
+    private List<WrapperDTO> children;
 
     @Override
     public String toString() {
