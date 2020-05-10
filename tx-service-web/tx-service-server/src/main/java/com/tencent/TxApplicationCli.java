@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 public class TxApplicationCli {
     public static void main(String[] args) {
-
         new SpringApplicationBuilder()
                 .bannerMode(Banner.Mode.OFF)
                 .listeners(new ProjectLogoConfiguration())
