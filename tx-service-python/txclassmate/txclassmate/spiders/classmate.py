@@ -60,6 +60,6 @@ class ClassmateSpider(scrapy.Spider):
             print("ip may error...")
 
     def close(self, spider, reason):
-        print("close connetion...")
+        print("close connection...")
         self.conn.close()
 
