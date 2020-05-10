@@ -46,7 +46,7 @@ class ClassmateSpider(scrapy.Spider):
                 item['title'] = r.xpath('./h4/a/@title').extract()
                 item['users'] = r.xpath('./div/span[@class="line-cell item-user custom-string"]/text()').extract()
                 item['price'] = r.xpath('./div/span[@class="line-cell item-price  custom-string"]/text()').extract()
-                item['agency'] = r.xpath( './div[@class="item-line item-line--middle"]/a[contains(@class,"item-source-link")]/@title').extract()
+                item['agency'] = r.xpath('./div[@class="item-line item-line--middle"]/a[contains(@class,"item-source-link")]/@title').extract()
                 item['link'] = r.xpath('./a/@href').extract()
                 yield item
 
