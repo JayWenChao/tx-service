@@ -25,7 +25,7 @@ class ClassmateSpider(scrapy.Spider):
         cursor.close()
         for r in result:
             st = r['c_seed_id']
-            url = urls_tempalte.format(r['p_seed_id'], r['c_seed_id'])
+            url = urls_tempalte.format(r['p_seed_id'], st)
             request = scrapy.Request(url=url, callback=self.parse)
             request.meta['seed_id'] = st
             yield request
@@ -51,9 +51,9 @@ class ClassmateSpider(scrapy.Spider):
                 item['link'] = r.xpath('./a/@href').extract()
                 yield item
 
-            sum_page = response.xpath('//div[@class="sort-page"]/a[last()]/@href').extract()[0]
-            if sum_page != "javascript:void(0);":
-                yield Request(sum_page, callback=self.parse)
+            next_page = response.xpath('//div[@class="sort-page"]/a[last()]/@href').extract()[0]
+            if next_page != "javascript:void(0);":
+                yield Request(next, callback=self.parse)
             else:
                 print("not found next page...")
         else:
