@@ -38,6 +38,9 @@ public class ClassMateModel {
     @TableField(value = "c_seed_id")
     private Integer seedId;
 
+    @TableField(value = "title")
+    private String title;
+
 
     @Override
     public String toString() {

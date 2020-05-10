@@ -1,4 +1,11 @@
-create database if not exists test_db;
+
+CREATE DATABASE IF NOT EXISTS test_db DEFAULT CHARACTER SET = utf8mb4;
+
+Use test_db;
+-- ----------------------------
+-- Table structure for tx_classmate
+-- ----------------------------
+DROP TABLE IF EXISTS tx_classmate;
 
 create table if not exists tx_classmate(
     id integer auto_increment primary key not null ,
@@ -10,6 +17,10 @@ create table if not exists tx_classmate(
     c_seed_id int(11)  comment '二级节点种子id'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+-- Table structure for tx_meta_class
+-- ----------------------------
+DROP TABLE IF EXISTS tx_meta_class;
 
 create table if not exists tx_meta_class(
 

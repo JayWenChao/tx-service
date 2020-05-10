@@ -26,10 +26,9 @@ public class KtDataController {
     }
 
     @PostMapping("/menu")
-    public MsgResponse selectMenu(Pair pair) {
+    public MsgResponse selectMenu() {
         return txDataService.queryMenu();
     }
-
 
 
 }

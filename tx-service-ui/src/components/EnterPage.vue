@@ -2,47 +2,31 @@
   <div class="CopClass">
     <el-row>
       <el-col :span="5">
-        <el-menu
-          default-active="2001"
-          @select='handleSelect'
-        >
-          <el-submenu
-            v-for="(item, index) in menus"
-            :key="index"
-            :index="item.id"
-          >
+        <el-menu default-active="2001" @select='handleSelect'>
+          <el-submenu v-for="(item, index) in menus" :key="index" :index="item.id">
             <template slot="title">
               <span>{{ item.name }}</span>
             </template>
             <template v-if='item.children && item.children.length'>
-              <el-menu-item
-                v-for='(_item, _index) in item.children'
-                :key="_index"
-                :index="item.id +'-'+_item.id"
-              >{{ _item.name }}
+              <el-menu-item v-for='(_item, _index) in item.children' :key="_index" :index="item.id +'-'+_item.id">
+                {{_item.name }}
               </el-menu-item>
             </template>
           </el-submenu>
         </el-menu>
       </el-col>
       <el-col :span="19">
-        <!-- <el-button type="primary" @click="query">xxx</el-button> -->
-        <el-table
-          :data="tableData"
-          style="width: 100%">
-          <el-table-column
-            v-for='(item, index) in columnMap'
-            :key="index"
-            :prop="item.value"
-            :label="item.name"
-          >
+        <el-radio v-model="radio" label="0">大额课</el-radio>
+        <el-radio v-model="radio" label="1">小额课</el-radio>
+      </el-col>
+      <el-col :span="19">
+        <el-table :data="tableData" style="width: 100%">
+          <el-table-column v-for='(item, index) in columnMap' :key="index" :prop="item.value" :label="item.name">
             <template slot-scope="scope">
               {{ scope.row[item.value] }}
             </template>
           </el-table-column>
-          <el-table-column
-            label="操作"
-          >
+          <el-table-column label="操作">
             <template slot-scope="scope">
               <a :href="scope.row.link" target="_blank">
                 <i class="el-icon-view"></i>
@@ -51,12 +35,7 @@
           </el-table-column>
         </el-table>
 
-        <el-pagination
-          v-if="pager.total > pager.size"
-          layout="prev, pager, next"
-          :total="pager.total"
-          @change="handlePager"
-        >
+        <el-pagination v-if="pager.total > pager.size" layout="prev, pager, next" :total="pager.total" @change="handlePager">
         </el-pagination>
       </el-col>
     </el-row>
@@ -68,11 +47,10 @@
 
     export default {
         name: 'CopName',
-        mounted() {
-            // console.log(11, MokcData)
-        },
         data() {
             return {
+
+                radio: 0,
                 isMock: true,
                 columnMap: [
                     {name: '课程名', value: 'users',},
@@ -105,7 +83,7 @@
                     },
                 ],
                 queryFirstId: 0,
-                querySecondtId: 0,
+                seedId: 0,
             }
         },
         methods: {
@@ -116,16 +94,17 @@
 
                 console.log(11, this.pager.current);
                 this.pager.total = 30; // 此处返回总条数
-                // axios.post("/api/query", {
-                //   id1: this.queryFirstId, //此处传二级id
-                //   id2: this.querySecondtId, //此处传二级id
-                // }).then((reponse) =>{
-                //     console.log("response: "+reponse.data)
-                // })
+                axios.post("/api/query", {
+                    numPage :1,
+                    seedId : 2001,
+                    priceTop : 1
+                }).then((reponse) =>{
+                    console.log("response: "+reponse.data.result)
+                })
             },
             handleSelect(index) {
                 this.queryFirstId = index.split('-')[0];
-                this.querySecondtId = index.split('-')[1];
+                this.seedId = index.split('-')[1];
                 this.pager.current = 1; // 筛选默认返回第一页
 
                 this.handleQuery();
