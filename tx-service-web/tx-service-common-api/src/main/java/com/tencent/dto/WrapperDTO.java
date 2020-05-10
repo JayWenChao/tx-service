@@ -15,7 +15,6 @@ import java.util.List;
 @EqualsAndHashCode
 public class WrapperDTO {
 
-
     private String name;
     private Integer id;
     private List<WrapperDTO> children;
