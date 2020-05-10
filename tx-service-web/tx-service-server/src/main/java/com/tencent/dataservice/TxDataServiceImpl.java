@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 public class TxDataServiceImpl implements ITxDataService {
 
     private final static String KEY = "menu";
-    private static final Cache<String, List<WrapperDTO>> CACHE = CacheBuilder.newBuilder()
+    private final static Cache<String, List<WrapperDTO>> CACHE = CacheBuilder.newBuilder()
             .initialCapacity(1024)
             .maximumSize(1000)
             .expireAfterWrite(8, TimeUnit.MINUTES)
