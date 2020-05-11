@@ -12,6 +12,7 @@ Tx-service 是一款腾讯课堂数据服务系统，现已开放源代码，开
   <img src="https://i.niupic.com/images/2020/05/10/7L2C.png" alt="系统架构图"  width="70%" />
 </p>
 
+
 #### 2.2 架构说明
 
 * **数据调度层** 
