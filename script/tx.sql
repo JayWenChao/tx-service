@@ -12,6 +12,7 @@ create table if not exists tx_classmate(
     link VARCHAR(32) comment '课程链接',
     price decimal(8,2) comment '价格',
     users  varchar(32) comment '报名人数或者购买人数',
+    person_number int(11) comment '人数',
     agency varchar(32) comment '课程机构',
     title varchar(255) comment '标题',
     c_seed_id int(11)  comment '二级节点种子id'
