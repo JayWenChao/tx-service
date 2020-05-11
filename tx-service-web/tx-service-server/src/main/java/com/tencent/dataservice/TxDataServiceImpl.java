@@ -79,7 +79,6 @@ public class TxDataServiceImpl implements ITxDataService {
 
     @Override
     public MsgResponse queryMenu() {
-
         List<WrapperDTO> resultList = Collections.emptyList();
         resultList = CACHE.getIfPresent(KEY);
         if (CollectionUtil.isEmpty(resultList)) {
