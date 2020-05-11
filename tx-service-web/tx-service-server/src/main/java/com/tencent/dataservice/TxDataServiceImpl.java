@@ -62,9 +62,9 @@ public class TxDataServiceImpl implements ITxDataService {
         Page<ClassMateModel> page = new Page<>(pair.getNumPage(), 20);
         LambdaQueryWrapper<ClassMateModel> queryWrapper = Wrappers.<ClassMateModel>lambdaQuery().eq(ClassMateModel::getSeedId, pair.getSeedId());
         if (PriceEnum.LOW.getPrice().equals(pair.getPriceTop())) {
-            queryWrapper.le(ClassMateModel::getPrice, 100).orderByDesc(ClassMateModel::getPrice);
+            queryWrapper.le(ClassMateModel::getPrice, 100).orderByDesc(ClassMateModel::getPersonNumber);
         } else {
-            queryWrapper.ge(ClassMateModel::getPrice, 100).orderByDesc(ClassMateModel::getPrice);
+            queryWrapper.ge(ClassMateModel::getPrice, 100).orderByDesc(ClassMateModel::getPersonNumber);
         }
 
         Page<ClassMateModel> classMateModelPage = classMateMapper.selectPage(page, queryWrapper);

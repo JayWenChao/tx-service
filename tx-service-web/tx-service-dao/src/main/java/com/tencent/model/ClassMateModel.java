@@ -35,6 +35,9 @@ public class ClassMateModel {
     @TableField(value = "link")
     private String link;
 
+    @TableField(value = "person_number")
+    private Integer personNumber;
+
     @TableField(value = "c_seed_id")
     private Integer seedId;
 

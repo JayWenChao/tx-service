@@ -25,7 +25,6 @@ class TxclassmatePipeline(object):
             price = 0
         else:
             price = str(item['price'][0]).replace("¥", "")
-            print(price)
             p_number = []
             if len(price.split(".")) == 2:
                 s_number = []
@@ -43,22 +42,20 @@ class TxclassmatePipeline(object):
         title = item['title'][0]
 
         users = str(item['users'][0]).replace("\n            ", "").replace(" ", "")
-        print(users)
         u_number = []
         for n in users.split("人")[0]:
             u_number.append(str(number_dict.get(int(n))))
-        users = "".join(u_number)+"人"+users.split("人")[1]
-        print(users)
+        users = "".join(u_number) + "人" + users.split("人")[1]
 
         link = item['link'][0]
         seed_id = item['seed_id']
         cursor = self.conn.cursor()
         insert_sql = """
-                        insert into tx_classmate(link, price, users ,agency,title,c_seed_id)
-                        VALUES(%s, %s, %s, %s,%s,%s)
+                        insert into tx_classmate(person_number,link, price, users ,agency,title,c_seed_id)
+                        VALUES(%s,%s, %s, %s, %s,%s,%s)
                      """
         try:
-            cursor.execute(insert_sql, (link, price, users, agency, title, seed_id))
+            cursor.execute(insert_sql, ("".join(u_number), link, price, users, agency, title, seed_id))
             self.conn.commit()
         except Exception as e:
             logging.error("insert data error...", e)
