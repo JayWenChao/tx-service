@@ -1,4 +1,4 @@
-scrapy==1.6.0
+scrapy==1.8.1
 PyMySQL==0.9.3
 lxml==4.5.0
 fake-useragent==0.9.3
